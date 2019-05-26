@@ -160,6 +160,7 @@
 //
 // Heaters / Fans
 //
+
 #define HEATER_0_PIN       P2_07
 #if HOTENDS == 1
   #define FAN1_PIN         P2_04

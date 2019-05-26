@@ -62,7 +62,7 @@ void menu_backlash();
   void menu_dac() {
     dac_driver_getValues();
     START_MENU();
-    MENU_BACK(MSG_ADVANCED_SETTINGS);
+    MENU_BACK(MSG_CONTROL);
     #define EDIT_DAC_PERCENT(N) MENU_ITEM_EDIT_CALLBACK(uint8, MSG_##N " " MSG_DAC_PERCENT, &driverPercent[_AXIS(N)], 0, 100, dac_driver_commit)
     EDIT_DAC_PERCENT(X);
     EDIT_DAC_PERCENT(Y);
@@ -80,7 +80,7 @@ void menu_backlash();
 
   void menu_pwm() {
     START_MENU();
-    MENU_BACK(MSG_ADVANCED_SETTINGS);
+    MENU_BACK(MSG_CONTROL);
     #define EDIT_CURRENT_PWM(LABEL,I) MENU_ITEM_EDIT_CALLBACK(long5, LABEL, &stepper.motor_current_setting[I], 100, 2000, stepper.refresh_motor_power)
     #if PIN_EXISTS(MOTOR_CURRENT_PWM_XY)
       EDIT_CURRENT_PWM(MSG_X MSG_Y, 0);
@@ -687,9 +687,9 @@ void menu_advanced_settings() {
   // BLTouch Self-Test and Reset
   //
   #if ENABLED(BLTOUCH)
-    MENU_ITEM(function, MSG_BLTOUCH_SELFTEST, []{ bltouch._selftest(); ui.refresh(); });
+    MENU_ITEM(gcode, MSG_BLTOUCH_SELFTEST, PSTR("M280 P" STRINGIFY(Z_PROBE_SERVO_NR) " S" STRINGIFY(BLTOUCH_SELFTEST)));
     if (!endstops.z_probe_enabled && bltouch.triggered())
-      MENU_ITEM(function, MSG_BLTOUCH_RESET, []{ bltouch._reset(); ui.refresh(); });
+      MENU_ITEM(gcode, MSG_BLTOUCH_RESET, PSTR("M280 P" STRINGIFY(Z_PROBE_SERVO_NR) " S" STRINGIFY(BLTOUCH_RESET)));
   #endif
 
   #if ENABLED(SD_FIRMWARE_UPDATE)
